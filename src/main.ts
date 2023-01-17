@@ -1,3 +1,4 @@
+import { ParseIntPipe } from '@nestjs/common/pipes';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
