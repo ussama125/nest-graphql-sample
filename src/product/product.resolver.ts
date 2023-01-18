@@ -1,13 +1,16 @@
 import { ProductService } from './product.service';
 import { Product, ProductInput } from './product.model';
-import { Resolver, Mutation, Args, Query, Int } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query, Int, ResolveField, Parent } from '@nestjs/graphql';
 import { Inject, NotFoundException } from '@nestjs/common';
+import { Price } from 'src/price/price.model';
+import { PriceService } from 'src/price/price.service';
 
 @Resolver(of => Product)
 export class ProductResolver {
 
   constructor(
-    @Inject(ProductService) private productService: ProductService
+    @Inject(ProductService) private productService: ProductService,
+    @Inject(PriceService) private priceService: PriceService
   ) { }
   
   @Query(returns => Product)
@@ -21,12 +24,11 @@ export class ProductResolver {
     return product;
   }
 
-//   @ResolveField(returns => [InvoiceModel])
-//   async invoices(@Parent() Product) {
-//     const { id } = Product;
-//     console.log(Product);
-//     return this.invoiceService.findByProduct(id);
-//   }
+  @ResolveField(returns => [Price])
+  async prices(@Parent() product: Product) {
+    const { sku } = product;
+    return this.priceService.findBySku(sku);
+  }
 
   @Query(returns => [Product])
   async getProducts(): Promise<Product[]> {

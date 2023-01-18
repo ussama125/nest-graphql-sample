@@ -19,6 +19,10 @@ export class ProductService {
       }
     
       findOne(id: number): Promise<Product> {
-        return this.productRepository.findOne({where: {id}});
+        return this.productRepository.findOne({where: {id}, relations: {prices: true}});
+      }
+    
+      findBySku(sku: string): Promise<Product> {
+        return this.productRepository.findOne({where: {sku}});
       }
 }

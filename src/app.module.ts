@@ -4,6 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { PriceModule } from './price/price.module';
 import { ProductModule } from './product/product.module';
 
 @Module({
@@ -31,6 +32,7 @@ import { ProductModule } from './product/product.module';
       synchronize: true
     }),
     ProductModule,
+    PriceModule
   ],
   controllers: [AppController],
   providers: [AppService],

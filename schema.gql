@@ -9,6 +9,7 @@ type Product {
   isActive: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
+  prices: [Price!]!
 }
 
 """
@@ -16,17 +17,36 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Price {
+  id: Int!
+  product: Product!
+  cost: Float!
+  base: Float!
+  sale: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Query {
   getProduct(id: Int!): Product!
   getProducts: [Product!]!
+  getPrice(id: Int!): Price!
+  getPrices: [Price!]!
 }
 
 type Mutation {
   createProduct(product: ProductInput!): Product!
+  createPrice(price: PriceInput!): Price!
 }
 
 input ProductInput {
   sku: String!
   image: String!
   isActive: Boolean!
+}
+
+input PriceInput {
+  sku: String!
+  cost: Float!
+  base: Float!
 }

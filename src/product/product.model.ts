@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { ObjectType, Field, Int, InputType } from '@nestjs/graphql';
+import { Price } from 'src/price/price.model';
 
 @ObjectType()
 @Entity('product')
@@ -9,7 +10,7 @@ export class Product {
   id: number;
 
   @Field()
-  @Column({ length: 50, nullable: false })
+  @Column({ length: 50, nullable: false, unique: true })
   sku: string;
 
   @Field()
@@ -19,6 +20,9 @@ export class Product {
   @Field()
   @Column({name: 'is_active'})
   isActive: boolean;
+
+  @OneToMany(type => Price, price => price.product)
+  prices: Price[];
 
   @Field()
   @Column({name: 'created_at'})
