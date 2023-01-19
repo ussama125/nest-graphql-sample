@@ -4,14 +4,18 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PriceModule } from './price/price.module';
-import { ProductModule } from './product/product.module';
+import { PriceModule } from './modules/price/price.module';
+import { ProductModule } from './modules/product/product.module';
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: 'schema.gql',
       driver: ApolloDriver,
+      subscriptions: {
+        'graphql-ws': true,
+        'subscriptions-transport-ws': true
+      },
       formatError: (error: any) => {
         const graphQLFormattedError = {
           message: error.extensions?.exception?.response?.message || error.message,
@@ -35,6 +39,8 @@ import { ProductModule } from './product/product.module';
     PriceModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService
+  ]
 })
 export class AppModule {}

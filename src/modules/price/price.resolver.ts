@@ -1,16 +1,18 @@
 import { PriceService } from './price.service';
 import { Price, PriceInput } from './price.model';
-import { Resolver, Mutation, Args, Query, Int, Parent, ResolveField } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query, Int, Parent, ResolveField, Subscription } from '@nestjs/graphql';
 import { Inject, NotFoundException } from '@nestjs/common';
-import { ProductService } from 'src/product/product.service';
-import { Product } from 'src/product/product.model';
+import { ProductService } from 'src/modules/product/product.service';
+import { Product } from 'src/modules/product/product.model';
+import { PubSubEngine } from 'graphql-subscriptions';
 
 @Resolver(of => Price)
 export class PriceResolver {
 
   constructor(
     @Inject(ProductService) private productService: ProductService,
-    @Inject(PriceService) private priceService: PriceService
+    @Inject(PriceService) private priceService: PriceService,
+    @Inject('PUB_SUB') private pubSub: PubSubEngine
   ) { }
   
   @Query(returns => Price)
@@ -46,6 +48,9 @@ export class PriceResolver {
         throw new NotFoundException('SKU does not exist');
     }
 
-    return await this.priceService.create(price, product);
+    const newPrice = await this.priceService.create(price, product);
+    await this.pubSub.publish('priceAdded', {priceAdded: newPrice});
+    return newPrice;
   }
+
 }

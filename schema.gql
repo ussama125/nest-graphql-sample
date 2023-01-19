@@ -50,3 +50,7 @@ input PriceInput {
   cost: Float!
   base: Float!
 }
+
+type Subscription {
+  priceAdded: Price!
+}

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Price, PriceInput } from './price.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Product } from 'src/product/product.model';
+import { Product } from 'src/modules/product/product.model';
 
 @Injectable()
 export class PriceService {
